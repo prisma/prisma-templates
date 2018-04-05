@@ -39,9 +39,9 @@ Parameters:
     Default: 2GB
 
   JvmOpts:
-    Description: The JVM options passed to prisma. For example, change this value to match the Memory parameters.
+    Description: The JVM options passed to prisma. For example, change this value when changing the memory parameter. Max heap memory (Xmx) should be roughly two thirds of the total memory.
     Type: String
-    Default: '-Xmx2G'
+    Default: '-Xmx1350m'
 
   ClusterPublicKey:
     Description: The RSA public key you want to secure your cluster with. Omitting leads to your cluster deployment and introspection endpoints being unsecured.
