@@ -1,0 +1,29 @@
+info:
+  title: Prisma Cluster
+  author: Aric Beagley <development@bastionweb.io>
+  description: |
+    Creates a Kubernetes cluster which hosts a prisma cluster and sets a reference point for other DM scripts
+
+required:
+  - zone
+
+properties:
+  zone:
+    type: string
+    description: Which zone you want your cluster to exist in
+  initialNodeCount:
+    type: integer
+    description: How many nodes you want to run in your cluster by default
+    default: 2
+  minNodeCount:
+    type: integer
+    description: How many nodes you want to run in your cluster by default
+    default: 1
+  maxNodeCount:
+    type: integer
+    description: How many nodes you want to run in your cluster by default
+    default: 2
+
+outputs:
+  clusterType:
+    description: The provider you use to create resources inside of the cluster after creation
