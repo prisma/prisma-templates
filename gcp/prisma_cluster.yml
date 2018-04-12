@@ -5,4 +5,5 @@ resources:
   - name: prisma-cluster
     type: prisma_cluster.jinja
     properties:
-      zone: us-west-2b
+      zone: us-west1-b
+    # initialNodeCount: 2

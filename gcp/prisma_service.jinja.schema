@@ -1,0 +1,41 @@
+info:
+  title: Prisma Service
+  author: Aric Beagley <development@bastionweb.io>
+  description: |
+    Creates the proper concepts for the created prisma-cluster in order to run a GCP hosted prisma cluster
+
+required:
+  - dbHost
+  - dbUser
+  - dbPassword
+
+properties:
+  dbHost:
+    description: The MySQL database host for Prisma to consume
+    type: string
+
+  dbPort:
+    type: integer
+    description: The MySQL database port for Prisma to consume
+    default: 3306
+
+  dbUser:
+    description: The MySQL database user for Prisma to consume
+    type: string
+
+  dbPassword:
+    description: The MySQL database password for Prisma to consume
+    type: string
+
+  jvmOpts:
+    description: The JVM options passed to prisma. For example, change this value when changing the memory parameter. Max heap memory (Xmx) should be roughly two thirds of the total memory.
+    type: String
+    default: '-Xmx1350m'
+
+  clusterAddress:
+    description: The url or ip of your public service that connects to the Prisma nodes
+    type: String
+
+  clusterPublicKey:
+    description: The RSA public key you want to secure your cluster with. Omitting leads to your cluster deployment and introspection endpoints being unsecured.
+    type: String
