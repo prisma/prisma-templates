@@ -269,6 +269,8 @@ Resources:
               Value: notrequired
             - Name: BUGSNAG_API_KEY
               Value: ""
+            - Name: CLUSTER_PUBLIC_KEY
+              Value: !Ref ClusterPublicKey
 
           Ulimits:
             - Name: nofile
