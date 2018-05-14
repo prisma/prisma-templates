@@ -43,8 +43,8 @@ Parameters:
     Type: String
     Default: '-Xmx1350m'
 
-  ClusterPublicKey:
-    Description: The RSA public key you want to secure your cluster with. Omitting leads to your cluster deployment and introspection endpoints being unsecured.
+  ManagementApiSecret:
+    Description: The secret for your Prisma server.
     Type: String
 
 Mappings:
@@ -269,8 +269,8 @@ Resources:
               Value: notrequired
             - Name: BUGSNAG_API_KEY
               Value: ""
-            - Name: CLUSTER_PUBLIC_KEY
-              Value: !Ref ClusterPublicKey
+            - Name: MANAGEMENT_API_SECRET
+              Value: !Ref ManagementApiSecret
 
           Ulimits:
             - Name: nofile
