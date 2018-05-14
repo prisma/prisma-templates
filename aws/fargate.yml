@@ -6,7 +6,9 @@ Parameters:
     Type: String
     Default: 1.5.3
     AllowedValues:
-      - 1.6-beta
+      - 1.8.3
+      - 1.7.4
+      - 1.6.3
       - 1.5.3
       - 1.5.2
       - 1.5.1
