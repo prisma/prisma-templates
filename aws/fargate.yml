@@ -4,8 +4,9 @@ Description: AWS Fargate Prisma stack.
 Parameters:
   PrismaVersion:
     Type: String
-    Default: 1.5.3
+    Default: 1.8.4
     AllowedValues:
+      - 1.8.4
       - 1.8.3
       - 1.7.4
       - 1.6.3
@@ -272,6 +273,8 @@ Resources:
             - Name: BUGSNAG_API_KEY
               Value: ""
             - Name: MANAGEMENT_API_SECRET
+              Value: !Ref ManagementApiSecret
+            - Name: PRISMA_MANAGEMENT_API_JWT_SECRET
               Value: !Ref ManagementApiSecret
 
           Ulimits:
