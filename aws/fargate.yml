@@ -272,7 +272,7 @@ Resources:
               Value: notrequired
             - Name: BUGSNAG_API_KEY
               Value: ""
-            - Name: MANAGEMENT_API_SECRET
+            - Name: PRISMA_MANAGEMENT_API_JWT_SECRET
               Value: !Ref ManagementApiSecret
             - Name: PRISMA_MANAGEMENT_API_JWT_SECRET
               Value: !Ref ManagementApiSecret
