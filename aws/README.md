@@ -19,9 +19,13 @@ What it includes:
 - A publicly accessible Prisma container, deployed to AWS ECS Fargate.
 
 What it _not_ includes / caveats:
-* The Fargate template only works in supported Fargate regions (N. Virginia / us-east-1 only at the moment).
+* Fargate is currently available in [these regions only](https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/):
+  * US East (N. Virginia) `us-east-1`.
+  * US East (Ohio) `us-east-2`.
+  * US West (Oregon) `us-west-2`.
+  * EU (Ireland) `eu-west-1`.
 * You can not deploy more than one container at the moment. Examples for multi-container setup will follow in the future.
-* You can not deploy more than one container per database. E.g. If you have a MySQL 
+* You can not deploy more than one container per database. E.g. If you have a MySQL.
 * **It is necessary to use Prisma version 1.6-beta or higher** for Fargate to work.
 * The template does not include SSL / Route53 setup.
 
