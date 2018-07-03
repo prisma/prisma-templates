@@ -4,14 +4,14 @@ Description: AWS Fargate Prisma stack.
 Parameters:
   PrismaVersion:
     Type: String
-    Default: 1.10.0
+    Default: 1.11.0
     AllowedValues:
-      - 1.10.0
+      - 1.11.0
+      - 1.10.2
       - 1.9.0
       - 1.8.4
       - 1.8.3
       - 1.7.4
-      - 1.6.3
 
   DbHost:
     Type: String
@@ -26,6 +26,10 @@ Parameters:
   DbPassword:
     Type: String
     NoEcho: true
+
+  DbConnector:
+    Type: String
+    Default: mysql
 
   # Important: Follow the CPU + memory combination rules laid out here: 
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html
@@ -238,42 +242,22 @@ Resources:
           PortMappings:
             - ContainerPort: 60000
           Environment:
-            - Name: PORT
-              Value: 60000
-            - Name: SQL_CLIENT_HOST
-              Value: !Ref DbHost
-            - Name: SQL_CLIENT_PORT
-              Value: !Ref DbPort
-            - Name: SQL_CLIENT_USER
-              Value: !Ref DbUser
-            - Name: SQL_CLIENT_PASSWORD
-              Value: !Ref DbPassword
-            - Name: SQL_CLIENT_CONNECTION_LIMIT
-              Value: 10
-            - Name: SQL_INTERNAL_HOST
-              Value: !Ref DbHost
-            - Name: SQL_INTERNAL_PORT
-              Value: !Ref DbPort
-            - Name: SQL_INTERNAL_USER
-              Value: !Ref DbUser
-            - Name: SQL_INTERNAL_PASSWORD
-              Value: !Ref DbPassword
-            - Name: SQL_INTERNAL_DATABASE
-              Value: graphcool
-            - Name: SQL_INTERNAL_CONNECTION_LIMIT
-              Value: 10
+            - Name: PRISMA_CONFIG
+              Value: !Sub 
+                - |
+                  port: 60000
+                  PRISMA_MANAGEMENT_API_SECRET: ${ManagementApiSecret}
+                  databases:
+                    default:
+                      connector: ${DbConnector}
+                      host: ${DbHost}
+                      port: ${DbPort}
+                      user: ${DbUser}
+                      password: ${DbPassword}
+                      migrations: true
+                - {}
             - Name: JAVA_OPTS
               Value: !Ref JvmOpts
-            - Name: CLUSTER_ADDRESS
-              Value: !GetAtt PublicLoadBalancer.DNSName
-            - Name: SCHEMA_MANAGER_SECRET
-              Value: notrequired
-            - Name: BUGSNAG_API_KEY
-              Value: ""
-            - Name: MANAGEMENT_API_SECRET
-              Value: !Ref ManagementApiSecret
-            - Name: PRISMA_MANAGEMENT_API_JWT_SECRET
-              Value: !Ref ManagementApiSecret
 
           Ulimits:
             - Name: nofile
