@@ -248,7 +248,7 @@ Resources:
               Value: !Sub 
                 - |
                   port: 60000
-                  PRISMA_MANAGEMENT_API_SECRET: ${ManagementApiSecret}
+                  managementApiSecret: ${ManagementApiSecret}
                   databases:
                     default:
                       connector: ${DbConnector}
