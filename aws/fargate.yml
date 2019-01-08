@@ -4,8 +4,9 @@ Description: AWS Fargate Prisma stack.
 Parameters:
   PrismaVersion:
     Type: String
-    Default: 1.23.0
+    Default: 1.24.0
     AllowedValues:
+      - 1.24.0
       - 1.23.0
       - 1.22.0
       - 1.21.0
