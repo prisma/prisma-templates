@@ -57,8 +57,8 @@ Parameters:
 
   Memory:
     Description: The memory reservation for the container. Must adhere to https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html.
-    Type: String
-    Default: 2GB
+    Type: Number
+    Default: 2048
 
   JvmOpts:
     Description: The JVM options passed to prisma. For example, change this value when changing the memory parameter. Max heap memory (Xmx) should be roughly two thirds of the total memory.
