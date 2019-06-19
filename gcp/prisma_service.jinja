@@ -1,0 +1,68 @@
+resources:
+  - name: prisma-service
+    type: prisma-cluster-type:/api/v1/namespaces/{namespace}/service
+    properties:
+      apiVersion: v1
+      kind: Service
+      namespace: default
+      metadata:
+        name: prisma-service
+      spec:
+        type: LoadBalancer
+        ports:
+          - port: 60000
+            targetPort: 60000
+            protocol: TCP
+        selector:
+          name: prisma-service
+
+  - name: prisma-deployment
+    type: prisma-cluster-type-apps-v1beta1:/apps/v1beta1/deployment
+    properties:
+      apiVersion: apps/v1beta1
+      kind: Deployment
+      metadata:
+        name: prisma-deployment
+      spec:
+        replicas: 2
+        template:
+          metadata:
+            labels:
+              app: prisma-instance
+          spec:
+            containers:
+              - name: prisma-container
+                image: prismagraphql/prisma:1.6-beta
+                env:
+                  - name: PORT
+                    value: 60000
+                  - name: SQL_CLIENT_HOST
+                    value: {{ properties['dbHost'] }}
+                  - name: SQL_CLIENT_PORT
+                    value: {{ properties['dbPort'] }}
+                  - name: SQL_CLIENT_USER
+                    value: {{ properties['dbUser'] }}
+                  - name: SQL_CLIENT_PASSWORD
+                    value: {{ properties['dbPass'] }}
+                  - name: SQL_CLIENT_CONNECTION_LIMIT
+                    value: 10
+                  - name: SQL_INTERNAL_HOST
+                    value: {{ properties['dbHost'] }}
+                  - name: SQL_INTERNAL_PORT
+                    value: {{ properties['dbPort'] }}
+                  - name: SQL_INTERNAL_USER
+                    value: {{ properties['dbUser'] }}
+                  - name: SQL_INTERNAL_PASSWORD
+                    value: {{ properties['dbPass'] }}
+                  - name: SQL_INTERNAL_DATABASE
+                    value: graphcool
+                  - name: SQL_INTERNAL_CONNECTION_LIMIT
+                    value: 10
+                  - name: JAVA_OPTS
+                    value: {{ properties['jvmOpts'] }}
+                  - name: CLUSTER_ADDRESS
+                    value: {{ properties['clusterAddress'] }}
+                  - name: SCHEMA_MANAGER_SECRET
+                    value: notrequired
+                  - name: BUGSNAG_API_KEY
+                    value: ""

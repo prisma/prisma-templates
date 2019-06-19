@@ -1,0 +1,9 @@
+imports:
+  - path: prisma_cluster.jinja
+
+resources:
+  - name: prisma-cluster
+    type: prisma_cluster.jinja
+    properties:
+      zone: us-west1-b
+    # initialNodeCount: 2

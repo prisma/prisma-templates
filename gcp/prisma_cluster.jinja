@@ -1,0 +1,57 @@
+# This script is a little flaky due to what seems to be an issue pointed out here:
+#
+# https://github.com/GoogleCloudPlatform/deploymentmanager-samples/issues/148
+#
+# Looks like GKE might need a bit of an update in order to properly setup the initial cluster for the follow up step.
+# I've also found that after a few retries I've had success and the cluster gets created.
+
+# Endpoints needed to create proper resources
+{% set K8S_ENDPOINTS = {'': 'api/v1', '-v1beta1-extensions': 'apis/extensions/v1beta1', '-apps-v1beta1': 'apps/v1beta1'} %}
+
+resources:
+  # https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1/projects.zones.clusters
+  - name: prisma-cluster
+    type: container.v1.cluster
+    properties:
+      # In order to change versions run the following command and replace with the version you desire.
+      # gcloud container get-server-config
+      initialClusterVersion: 1.9.6-gke.0
+      zone: {{ properties['zone'] }}
+      # You'll notice the key doesn't exist in the definition for this particular resource. This is the primary
+      # key that will get mapped to values below for our custom type definition and give us a reference to
+      # our Kubernetes api.
+      cluster:
+        name: prisma-cluster
+        initialNodeCount: {{ properties['initialNodeCount'] }}
+        nodeConfig:
+          oauthScopes:
+            - https://www.googleapis.com/auth/compute
+            - https://www.googleapis.com/auth/devstorage.read_only
+            - https://www.googleapis.com/auth/logging.write
+            - https://www.googleapis.com/auth/monitoring
+  {% for typeSuffix, endpoint in K8S_ENDPOINTS.iteritems() %}
+  # https://cloud.google.com/deployment-manager/docs/reference/v2beta/typeProviders
+  - name: prisma-cluster-type{{typeSuffix}}
+    type: deploymentmanager.v2beta.typeProvider
+    properties:
+      # We're only setting up the official api/v1 endpoint for Kubernetes here. If you need additional
+      # url extensions you can create a loop to make X custom types per endpoint. Prisma doesn't require anything
+      # that isn't in the standard V1 API.
+      descriptorUrl: https://$(ref.prisma-cluster.endpoint)/swaggerapi/{{ endpoint }}
+      options:
+        validationOptions:
+          schemaValidation: IGNORE_WITH_WARNINGS
+        inputMappings:
+          - fieldName: name
+            location: PATH
+            methodMatch: ^(GET|DELETE|PUT)$
+            value: $.ifNull($.resource.properties.metadata.name, $.resource.name)
+          - fieldName: metadata.name
+            location: BODY
+            methodMatch: ^(PUT|POST)$
+            value: $.ifNull($.resource.properties.metadata.name, $.resource.name)
+          - fieldName: Authorization
+            location: HEADER
+            value: >
+              $.concat("Bearer ", $.googleOauth2AccessToken())
+  {% endfor %}
