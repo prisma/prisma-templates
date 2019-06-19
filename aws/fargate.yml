@@ -304,6 +304,7 @@ Resources:
       DeploymentConfiguration: 
         MaximumPercent: 200
         MinimumHealthyPercent: 50
+      HealthCheckGracePeriodSeconds: 30
       TaskDefinition: !Ref TaskDefinition
       LoadBalancers: 
         - ContainerName: prisma-container
