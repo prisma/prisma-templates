@@ -1,6 +1,6 @@
 # Template adapted from https://github.com/nathanpeck/aws-cloudformation-fargate
 AWSTemplateFormatVersion: '2010-09-09'  
-Description: AWS Fargate Prisma stack.
+Description: AWS Fargate Prisma stack (MySQL).
 Parameters:
   PrismaVersion:
     Type: String
